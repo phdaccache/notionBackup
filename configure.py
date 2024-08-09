@@ -2,6 +2,7 @@ import os
 import zipfile
 import shutil
 import streamlit as st
+import urllib.parse
 
 def make_backup(uploaded_file):
     # Directory containing the .zip files 
@@ -29,7 +30,7 @@ def make_backup(uploaded_file):
             with open(files_paths[file][0]+"/"+files_paths[file][1]+temp_id+".html", "wt") as fout:
                 for line in fin:
                     for f in files_paths:
-                        f2 = f.replace(" ", "%20")
+                        f2 = urllib.parse.quote(f)
                         f2 = f2.replace(".html", "")
                         line = line.replace(f2, files_paths[f][1]+temp_id)
                     fout.write(line)
