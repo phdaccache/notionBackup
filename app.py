@@ -1,5 +1,5 @@
 import streamlit as st
-from configure import make_backup
+from backup import make_backup
 
 st.title("Notion Backup")
 
