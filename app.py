@@ -12,13 +12,13 @@ if st.button("Make Backup"):
             t, _ = bp.time_function(bp.make_backup, uploaded_file)
         st.success("Backup Concluded! " + t)
 
-    with open("Notion_Backup.zip", "rb") as fp:
-        btn = st.download_button(
-            label="Download ZIP",
-            data=fp,
-            file_name="Notion_Backup.zip",
-            mime="application/zip"
-        )
+        with open("Notion_Backup.zip", "rb") as fp:
+            btn = st.download_button(
+                label="Download ZIP",
+                data=fp,
+                file_name="Notion_Backup.zip",
+                mime="application/zip"
+            )
 
 st.info("Remember to refresh the page to make another backup.")
 
