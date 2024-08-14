@@ -1,2 +1,0 @@
-2. The app doesn't support zip files with more than 200Mb. It would be interesting to make a
-simple tutorial explaining how to run the scrip locally.

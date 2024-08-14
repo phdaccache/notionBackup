@@ -1,5 +1,5 @@
 import streamlit as st
-from backup import make_backup
+import backup as bp
 
 st.title("Notion Backup")
 
@@ -17,8 +17,8 @@ uploaded_file = st.file_uploader("Choose a file",type="zip")
 if st.button("Make Backup"):
     if uploaded_file is not None:
         with st.spinner("Making Backup"):
-            make_backup(uploaded_file)
-        st.success("Backup Concluded!")
+            t, _ = bp.time_function(bp.make_backup, uploaded_file)
+        st.success("Backup Concluded! " + t)
 
     with open("Notion_Backup.zip", "rb") as fp:
         btn = st.download_button(
@@ -26,4 +26,17 @@ if st.button("Make Backup"):
             data=fp,
             file_name="Notion_Backup.zip",
             mime="application/zip"
+        )
+
+st.write("---")
+with st.expander("Zip too big?"):
+    st.write("Download the script and run it locally!")
+    st.write("Make sure you have your zipped file from Notion and the python script in the same directory, just like this:")
+    st.image("image3.png")
+    st.write("Then, just run the backup.py script and follow the instructions in the terminal.")
+    with open("local_backup.py", "rb") as fp:
+        btn = st.download_button(
+            label="Download Script",
+            data=fp,
+            file_name="backup.py",
         )

@@ -30,6 +30,7 @@ def make_backup():
     # Folders
     for root, dirs, files in os.walk(zip_dir):
         for dir in dirs:
+            if root.find(extract_dir) == -1: continue
             if dir == final_folder: continue
             id = dir[-32:]
             if id not in dic:
@@ -55,6 +56,7 @@ def make_backup():
     # Folders
     for root, dirs, files in os.walk(zip_dir, topdown=False):
         for dir in dirs:
+            if root.find(extract_dir) == -1: continue
             if dir == final_folder: continue
             id = dir[-32:]
             os.rename(os.path.join(root, dir), os.path.join(root, str(dic[id])))
