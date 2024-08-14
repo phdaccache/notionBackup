@@ -1,6 +1,2 @@
-1. The 'urllib.parse.quote' method is not quite right. Characters like '(' and ')'are being escaped
-by the method but not by notion. How can we know eaxctly which characters is notion
-escaping in the html files?
-
 2. The app doesn't support zip files with more than 200Mb. It would be interesting to make a
 simple tutorial explaining how to run the scrip locally.
