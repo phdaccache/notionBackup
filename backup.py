@@ -8,6 +8,7 @@ def make_backup():
     zip_dir = "." 
     extract_dir = "./" + final_folder
 
+    # Extracting zip file
     for file_name in os.listdir(zip_dir): 
         if file_name.endswith(".zip"): 
             zip_file = os.path.join(zip_dir, file_name) 
@@ -17,44 +18,43 @@ def make_backup():
     count = 0
     dic = {}
 
-    # Files
+    # Files: getting id and giving it a new name (count)
     for root, dirs, files in os.walk(zip_dir):
         for file in files:
-            if file.endswith(".html"):
-                #if count == 0: original_name = file[:-38]
-                id = file[-37:-5]
+            if file.endswith(".html"): # we don't need to change any other file (line .png)
+                id = file[-37:-5] # the id is always a string with 32 numbers, and the last 5 are '.html'
                 if id not in dic:
                     dic[id] = count
                     count += 1
 
-    # Folders
+    # Folders: getting id and giving it a new name (count)
     for root, dirs, files in os.walk(zip_dir):
         for dir in dirs:
-            if root.find(extract_dir) == -1: continue
-            if dir == final_folder: continue
-            id = dir[-32:]
-            if id not in dic:
+            if root.find(extract_dir) == -1: continue # if the dir being looked is outside of ./Notion_Backup
+            if dir == final_folder: continue # if the dir is Notion_Backup, we don't change its name
+            id = dir[-32:] # the id is always a string with 32 numbers, and dirs don't end with '.html'
+            if id not in dic: # a dir may have the same id as its corresponding file
                 dic[id] = count
                 count += 1
     
-    # Files
+    # Files: changing all the references of the previous names with the new names (count)
     for root, dirs, files in os.walk(zip_dir):
         for file in files:
             if file.endswith(".html"):
                 id = file[-37:-5]
-                with open(os.path.join(root, file), "rt") as fin:
-                    with open(os.path.join(root, str(dic[id])) + ".html", "wt") as fout:
-                        for line in fin:
-                            for key, value in dic.items():
-                                f = get_substring(line, key)
-                                if f is not None:
-                                    f = f.replace(".html", "")
+                with open(os.path.join(root, file), "rt") as fin: # old file
+                    with open(os.path.join(root, str(dic[id])) + ".html", "wt") as fout: # new file
+                        for line in fin: # iterating over every line in the file
+                            for key, value in dic.items(): # key = id, value = count
+                                f = get_substring(line, key) # get the complete file name with an certain id
+                                if f is not None: # not every line will have every file referenced
+                                    f = f.replace(".html", "") # we want to change dirs too
                                     line = line.replace(f, str(value))
                             fout.write(line)
-                        os.remove(os.path.join(root, file))
+                        os.remove(os.path.join(root, file)) # remove the old file
 
     # Folders
-    for root, dirs, files in os.walk(zip_dir, topdown=False):
+    for root, dirs, files in os.walk(zip_dir, topdown=False): # iterate from inside out to avoid crash
         for dir in dirs:
             if root.find(extract_dir) == -1: continue
             if dir == final_folder: continue
@@ -68,6 +68,7 @@ def extract_zip(zip_file, extract_dir):
 def delete_file(file_path): 
     os.remove(file_path)
 
+# gets the substring with a given id isolated by the closest left and right delimiters
 def get_substring_containing_id(line, id, left_delimiter, right_delimiter):
     start_index = line.find(id)
     if start_index == -1:
@@ -88,6 +89,7 @@ def get_shortest_string(*strings):
 
     return min(non_none_strings, key=len)
 
+# tests every option to see which is the shortest (the correct one)
 def get_substring(line, id):
     left_delimiter1 = '"'
     left_delimiter2 = '/'
