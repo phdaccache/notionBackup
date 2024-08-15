@@ -16,7 +16,7 @@ st.image("image2.png")
 
 st.write("---")
 
-with open("local_backup.py", "rb") as fp:
+with open("backup.py", "rb") as fp:
     btn = st.download_button(
         label="Download Script",
         data=fp,

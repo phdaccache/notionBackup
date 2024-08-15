@@ -1,17 +1,18 @@
-import streamlit as st
 import os
 import zipfile
 import shutil
 import time
 
-def make_backup(uploaded_file):
+def make_backup():
     final_folder = "Notion_Backup"
     zip_dir = "." 
     extract_dir = "./" + final_folder
-    
-    if uploaded_file.type != None:
-        with zipfile.ZipFile(uploaded_file, 'r') as zip_ref: 
-            zip_ref.extractall(extract_dir)
+
+    for file_name in os.listdir(zip_dir): 
+        if file_name.endswith(".zip"): 
+            zip_file = os.path.join(zip_dir, file_name) 
+            extract_zip(zip_file, extract_dir) 
+            delete_file(zip_file)
 
     count = 0
     dic = {}
@@ -60,7 +61,12 @@ def make_backup(uploaded_file):
             id = dir[-32:]
             os.rename(os.path.join(root, dir), os.path.join(root, str(dic[id])))
 
-    zip_folder()
+def extract_zip(zip_file, extract_dir): 
+    with zipfile.ZipFile(zip_file, 'r') as zip_ref: 
+        zip_ref.extractall(extract_dir) 
+
+def delete_file(file_path): 
+    os.remove(file_path)
 
 def get_substring_containing_id(line, id, left_delimiter, right_delimiter):
     start_index = line.find(id)
@@ -96,9 +102,9 @@ def get_substring(line, id):
 def zip_folder():
     shutil.make_archive("Notion_Backup", 'zip', "./Notion_Backup")
 
-def time_function(func, *args):
+def time_function(func, *args, **kwargs):
     start_time = time.time()
-    result = func(*args)
+    result = func(*args, **kwargs)
     end_time = time.time()
     
     elapsed_time = end_time - start_time
@@ -113,3 +119,28 @@ def time_function(func, *args):
         formatted_time = f"Took {seconds:.1f}s."
     
     return formatted_time, result
+
+
+print("Make sure your folder looks like this:")
+print("Your Folder")
+print("  |-- NotionsBackup.zip")
+print("  |-- backup.py")
+print("Start backup? (y/n)", end = " ")
+i = input()
+
+if i in ("y","Y"):
+    print("Making backup...")
+    t, _ = time_function(make_backup)
+    print("")
+    print("Backup Completed!", end = " ")
+    print(t)
+    print("")
+    print("Would you like to zip the folder? (y/n)", end = " ")
+    i2 = input()
+
+    if i2 in ("y","Y"):
+        print("Zipping...")
+        t2,_ = time_function(zip_folder)
+        print("")
+        print("Folder zipped!", end = " ")
+        print(t)
