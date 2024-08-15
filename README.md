@@ -29,4 +29,5 @@ To open your page locally, just click on '0.html':
 # Streamlit App
 I also made a streamlit app with this exactly tutorial because why not (you can donwload the script directly from there so maybe it could be easier for someone not familiar with GitHub idk)
 
-Check it out: [View the app](https://notion-backup.streamlit.app)
+Check it out:
+[View the app](https://share.streamlit.io/phdaccache/notionBackup/main/app.py)
