@@ -1,5 +1,9 @@
 import streamlit as st
 
+st.set_page_config(
+    page_title="Notion Backup"
+)
+
 st.title("Notion Backup")
 
 st.subheader("Tutorial")
